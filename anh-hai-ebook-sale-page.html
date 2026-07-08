@@ -4,11 +4,12 @@
 
   CÁC CHỖ CẦN BẠN THAY BẰNG DỮ LIỆU THẬT TRƯỚC KHI PUBLISH (tìm bằng Ctrl+F "CẦN THAY"):
   1. CHECKOUT_URL (trong thẻ <script> cuối file) — link thanh toán thật
-  2. COUNTDOWN_DEADLINE (trong thẻ <script> cuối file) — hạn khuyến mãi thật, không dùng ngày ảo
-  3. Khối "uy tín tác giả" (section #credibility) — điền kinh nghiệm thật
-  4. 3 khối testimonial (section #credibility) — thay bằng phản hồi thật kèm tên/ảnh khi có
-  5. FAQ câu 7 (định dạng file: PDF/EPUB/bản in) — xác nhận định dạng thật
-  6. Số lượng ưu đãi trong banner urgency — số thật, không bịa
+  2. Khối "uy tín tác giả" (section #credibility) — điền kinh nghiệm thật
+  3. 3 khối testimonial (section #credibility) — thay bằng phản hồi thật kèm tên/ảnh khi có
+
+  Đã điền theo yêu cầu (2026-07-08): hạn khuyến mãi = 1 tháng kể từ ngày deploy (2026-08-08),
+  số lượng ưu đãi = 10 người, định dạng sách = PDF. Nếu ngày deploy thực tế khác 2026-07-08,
+  cập nhật lại COUNTDOWN_DEADLINE trong <script> cuối file cho khớp.
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -208,7 +209,7 @@
 
 <!-- ===== URGENCY BAR ===== -->
 <div class="urgency-bar">
-  🔥 Giá ưu đãi ra mắt <span>297.000đ</span> chỉ áp dụng cho <span id="slots-left">CẦN THAY: số lượng thật</span> bạn đọc đầu tiên — còn lại <span id="countdown">--:--:--</span>
+  🔥 Giá ưu đãi ra mắt <span>297.000đ</span> chỉ áp dụng cho <span id="slots-left">10</span> bạn đọc đầu tiên — còn lại <span id="countdown">--:--:--</span>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -418,9 +419,8 @@
         <div class="faq-a"><p>Hoàn tiền 100% trong 7 ngày, không cần lý do.</p></div>
       </div>
       <div class="faq-item">
-        <!-- CẦN THAY: xác nhận định dạng file thật -->
         <button class="faq-q">Sách có bản in không hay chỉ có file?</button>
-        <div class="faq-a"><p>[CẦN THAY: định dạng thật — PDF / EPUB / bản in]</p></div>
+        <div class="faq-a"><p>Sách ở định dạng PDF, nhận file ngay sau khi thanh toán, đọc được trên điện thoại, máy tính và máy tính bảng.</p></div>
       </div>
     </div>
   </div>
@@ -447,8 +447,8 @@
 (function(){
   // CẦN THAY: link thanh toán thật
   var CHECKOUT_URL = "#";
-  // CẦN THAY: hạn khuyến mãi thật (ISO date), không dùng ngày ảo
-  var COUNTDOWN_DEADLINE = new Date(Date.now() + 3*24*60*60*1000); // placeholder: +3 ngày kể từ khi mở trang
+  // Hạn khuyến mãi: 1 tháng kể từ ngày deploy (2026-07-08) — cập nhật lại nếu deploy ngày khác
+  var COUNTDOWN_DEADLINE = new Date("2026-08-08T23:59:59");
 
   document.querySelectorAll('#cta-main, .cta-final').forEach(function(el){
     el.setAttribute('href', CHECKOUT_URL);
