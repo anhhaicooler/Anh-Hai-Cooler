@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, CalendarDays, Check, Gift, Play, Sparkles, Users } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Check, Gift, MessageCircle, Play, QrCode, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import workshopCoverAsset from "@/assets/workshop-cover.png.asset.json";
-import speakerPortraitAsset from "@/assets/phong-menly-portrait.png.asset.json";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import paymentQr from "@/assets/payment-qr-sacombank.jpg";
+import workshopHero from "@/assets/workshop-hero-professional.jpg";
+import speakerPortrait from "@/assets/speaker-portrait-professional.jpg";
 
-const workshopHero = workshopCoverAsset.url;
-const speakerPortrait = speakerPortraitAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,34 +31,83 @@ const benefits = [
   ["Ý tưởng tạo thu nhập", "Khám phá các mô hình ứng dụng AI Agent thực tế cho KOL, Affiliate và nhà sáng tạo."],
 ];
 
-function RegisterButton({ label = "Nhận vé & miễn phí tài nguyên" }: { label?: string }) {
+function RegisterButton({ label = "Nhận vé & miễn phí tài nguyên", onClick }: { label?: string; onClick: () => void }) {
   return (
-    <Button asChild variant="workshop" size="workshop" className="w-full max-w-md rounded-lg">
-      <a href="#register">{label}<ArrowUpRight aria-hidden="true" /></a>
+    <Button type="button" onClick={onClick} variant="workshop" size="workshop" className="w-full max-w-md rounded-lg">
+      {label}<ArrowUpRight aria-hidden="true" />
     </Button>
   );
 }
 
-function FallingPetals() {
+function PaymentDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   return (
-    <div className="petal-scene" aria-hidden="true">
-      {Array.from({ length: 18 }, (_, index) => <span key={index} className="petal" />)}
-    </div>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[94vh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-2xl border-primary/20 p-0">
+        <div className="grid sm:grid-cols-[0.9fr_1.1fr]">
+          <div className="bg-secondary p-5 sm:p-7">
+            <div className="mb-4 flex items-center justify-center gap-2 font-mono text-xs font-bold uppercase text-primary">
+              <QrCode className="size-4" aria-hidden="true" /> Quét mã thanh toán
+            </div>
+            <div className="mx-auto aspect-square max-w-[300px] overflow-hidden rounded-xl border border-border bg-white shadow-lg">
+              <img src={paymentQr} alt="Mã QR thanh toán Sacombank" width={1183} height={2560} className="h-full w-full object-cover object-[center_34%]" />
+            </div>
+            <div className="mt-4 rounded-lg border border-border bg-background/80 p-3 text-center text-xs text-muted-foreground">
+              <p className="font-bold text-foreground">SACOMBANK · TRUONG THANH TUNG</p>
+              <p className="mt-1 font-mono text-sm font-bold tracking-wide text-primary">060084203291</p>
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8">
+            <DialogHeader>
+              <p className="font-mono text-xs font-bold uppercase text-primary">Hoàn tất đăng ký workshop</p>
+              <DialogTitle className="font-display text-3xl font-bold leading-tight tracking-[-0.035em]">Thanh toán 50.000đ</DialogTitle>
+              <DialogDescription className="pt-1 leading-relaxed">Làm theo các bước bên dưới để được xác nhận vé và nhận tài nguyên workshop.</DialogDescription>
+            </DialogHeader>
+
+            <ol className="my-6 grid gap-3 text-sm">
+              {[
+                "Mở ứng dụng ngân hàng và quét mã QR.",
+                "Nhập chính xác số tiền 50.000đ và tiến hành chuyển khoản.",
+                "Chụp lại màn hình giao dịch thành công.",
+                "Gửi biên lai qua Zalo 0939782883 để được xác nhận.",
+              ].map((step, index) => (
+                <li key={step} className="grid grid-cols-[28px_minmax(0,1fr)] items-start gap-3">
+                  <span className="grid size-7 place-items-center rounded-full bg-primary font-mono text-xs font-bold text-primary-foreground">{index + 1}</span>
+                  <span className="pt-1 leading-relaxed text-muted-foreground">{step}</span>
+                </li>
+              ))}
+            </ol>
+
+            <Button asChild variant="workshop" size="workshop" className="w-full rounded-lg">
+              <a href="https://zalo.me/0939782883" target="_blank" rel="noreferrer">
+                <MessageCircle aria-hidden="true" /> Gửi biên lai qua Zalo
+              </a>
+            </Button>
+            <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+              Vé tham gia và bộ tài nguyên sẽ được gửi sau khi giao dịch được xác nhận.
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 function Index() {
+  const [paymentOpen, setPaymentOpen] = useState(false);
+
   return (
     <main className="min-h-screen overflow-hidden bg-background font-body text-foreground selection:bg-primary selection:text-primary-foreground">
-      <FallingPetals />
+      <PaymentDialog open={paymentOpen} onOpenChange={setPaymentOpen} />
       <div className="bg-primary px-4 py-3 text-center text-primary-foreground">
-        <p className="font-mono text-[11px] font-medium uppercase">• Huấn luyện cấp tốc — một lần duy nhất •</p>
+        <p className="text-xs font-semibold tracking-[0.08em]">• Huấn luyện cấp tốc — một lần duy nhất •</p>
       </div>
 
       <header className="mx-auto max-w-[880px] px-5 pb-16 pt-14 text-center sm:px-8 sm:pt-20">
         <div className="workshop-rise">
-          <p className="mb-5 font-mono text-xs font-medium uppercase text-primary">Workshop thực chiến dành cho người muốn đi trước</p>
-          <h1 className="text-balance font-display text-5xl font-normal uppercase leading-[0.94] sm:text-7xl lg:text-8xl">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.1em] text-primary">Workshop thực chiến dành cho người muốn đi trước</p>
+          <h1 className="text-balance font-display text-4xl font-bold leading-[1.08] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
             Nuôi AI Agent cày thay mình <span className="text-primary">24/7</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl">
@@ -67,20 +117,20 @@ function Index() {
 
         <div className="workshop-rise mt-9 inline-flex items-center gap-3 rounded-lg border border-primary/15 bg-secondary px-5 py-3 [animation-delay:100ms]">
           <CalendarDays className="size-5 text-primary" aria-hidden="true" />
-          <span className="font-mono text-sm font-medium text-secondary-foreground">20:00 — Chủ nhật, 21/09</span>
+          <span className="text-sm font-semibold text-secondary-foreground">20:00 — Chủ nhật, 21/09</span>
         </div>
 
         <div className="workshop-rise group relative mt-10 [animation-delay:200ms]">
-          <div className="absolute -inset-1 rounded-xl bg-primary/20 opacity-30 blur-xl transition-opacity duration-700 group-hover:opacity-60" />
-          <img src={workshopHero} alt="Phong Menly giới thiệu ChatGPT Images 2.5" width={1366} height={768} className="relative aspect-video w-full rounded-lg border border-primary/20 object-cover shadow-2xl" />
-          <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-md bg-foreground/90 px-3 py-2 font-mono text-[10px] uppercase text-background backdrop-blur sm:bottom-5 sm:left-5">
+          <div className="absolute -inset-1 rounded-xl bg-primary/10 opacity-50 transition-opacity duration-700 group-hover:opacity-80" />
+          <img src={workshopHero} alt="Phong Menly trong không gian làm việc chuyên nghiệp" width={853} height={1280} className="relative aspect-[4/5] w-full rounded-lg border border-primary/20 object-cover object-[center_43%] shadow-2xl saturate-[0.92] contrast-[1.03] sm:aspect-video" />
+          <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-md bg-foreground px-3 py-2 text-xs font-semibold text-background sm:bottom-5 sm:left-5">
             <Sparkles className="size-3 text-primary" /> AI Agent thực chiến
           </div>
         </div>
 
         <div className="workshop-rise mt-10 [animation-delay:300ms]">
           <p className="mb-4 text-sm italic text-muted-foreground">Bạn muốn đứng ngoài cuộc chơi AI hay bắt đầu <strong className="text-primary">ngay hôm nay?</strong></p>
-          <RegisterButton />
+          <RegisterButton onClick={() => setPaymentOpen(true)} />
           <p className="mt-4 font-mono text-[11px] text-muted-foreground">Giữ chỗ và nhận trọn bộ tài nguyên độc quyền</p>
         </div>
       </header>
@@ -89,15 +139,15 @@ function Index() {
         <div className="mx-auto max-w-[800px]">
           <div className="mb-12 text-center sm:mb-16">
             <p className="mb-3 font-mono text-xs uppercase text-primary">Giá trị bạn mang về</p>
-            <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Bạn sẽ nhận được gì?</h2>
+            <h2 className="font-display text-3xl font-bold leading-tight tracking-[-0.035em] sm:text-5xl">Bạn sẽ nhận được gì?</h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">Không chỉ là ý tưởng — đây là bộ công cụ và quy trình để bạn bắt tay làm ngay.</p>
           </div>
           <div className="grid gap-3 sm:gap-4">
             {benefits.map(([title, description], index) => (
               <article key={title} className="group grid grid-cols-[auto_minmax(0,1fr)] gap-4 rounded-lg border border-border bg-background p-5 transition-colors hover:border-primary/40 sm:grid-cols-[64px_minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:p-6">
-                <span className="font-display text-4xl font-extrabold text-primary/25 transition-colors group-hover:text-primary">{String(index + 1).padStart(2, "0")}</span>
+                <span className="font-display text-2xl font-bold text-primary/60 transition-colors group-hover:text-primary">{String(index + 1).padStart(2, "0")}</span>
                 <div className="min-w-0">
-                  <h3 className="font-display text-xl font-normal uppercase leading-tight sm:text-2xl">{title}</h3>
+                  <h3 className="font-display text-lg font-bold leading-snug tracking-[-0.02em] sm:text-xl">{title}</h3>
                   <p className="mt-1 leading-relaxed text-muted-foreground">{description}</p>
                 </div>
                 <ArrowUpRight className="hidden size-5 shrink-0 text-primary sm:block" aria-hidden="true" />
@@ -111,17 +161,17 @@ function Index() {
         <div className="mx-auto max-w-[800px]">
           <div className="mb-10 text-center">
             <p className="mb-3 font-mono text-xs uppercase text-primary">Người đồng hành</p>
-            <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Diễn giả huấn luyện</h2>
+            <h2 className="font-display text-3xl font-bold leading-tight tracking-[-0.035em] sm:text-5xl">Diễn giả huấn luyện</h2>
           </div>
           <div className="rounded-xl border border-border bg-card p-2 shadow-xl">
             <div className="flex flex-col items-center gap-8 rounded-lg bg-background p-6 sm:flex-row sm:p-8">
               <div className="relative shrink-0">
                 <div className="workshop-pulse absolute -inset-3 rounded-full bg-primary/15" />
-                <img src={speakerPortrait} alt="Chân dung diễn giả Phong Menly" width={768} height={768} loading="lazy" className="relative size-40 rounded-full border-4 border-card object-cover object-top shadow-lg sm:size-48" />
+                <img src={speakerPortrait} alt="Chân dung chuyên nghiệp của diễn giả Phong Menly" width={955} height={1280} loading="lazy" className="relative size-40 rounded-full border-4 border-card object-cover object-[center_24%] shadow-xl ring-1 ring-primary/15 sm:size-48" />
               </div>
               <div className="min-w-0 text-center sm:text-left">
-                <h3 className="font-display text-4xl font-normal uppercase leading-none">Phong Menly</h3>
-                <p className="mt-2 font-mono text-sm uppercase text-primary">KOL AI & Vibe Coding</p>
+                <h3 className="font-display text-3xl font-bold leading-tight tracking-[-0.03em]">Phong Menly</h3>
+                <p className="mt-2 text-sm font-semibold text-primary">KOL AI & Vibe Coding</p>
                 <div className="my-5 flex flex-wrap justify-center gap-2 sm:justify-start">
                   {["AI Expert", "Creator", "Vibe Coding"].map((tag) => <span key={tag} className="rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase text-secondary-foreground">{tag}</span>)}
                 </div>
@@ -137,13 +187,13 @@ function Index() {
           <div className="mb-10 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-5">
             <div className="min-w-0">
               <p className="mb-3 font-mono text-xs uppercase text-primary">Preview workshop</p>
-              <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Xem trước nội dung</h2>
+              <h2 className="font-display text-3xl font-bold leading-tight tracking-[-0.035em] sm:text-5xl">Xem trước nội dung</h2>
               <p className="mt-4 text-background/60">Một lát cắt ngắn về cách AI Agent phối hợp để hoàn thành công việc.</p>
             </div>
             <span className="hidden rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase text-primary sm:block">Exclusive</span>
           </div>
           <a href="https://www.youtube.com/watch?v=K2H9p7IGhdo" target="_blank" rel="noreferrer" className="group relative block aspect-video overflow-hidden rounded-lg border border-background/10" aria-label="Xem video giới thiệu workshop trên YouTube">
-            <img src={workshopHero} alt="Ảnh xem trước video workshop AI Agent" width={1280} height={720} loading="lazy" className="h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-[1.02]" />
+            <img src={workshopHero} alt="Ảnh xem trước video workshop AI Agent" width={853} height={1280} loading="lazy" className="h-full w-full object-cover object-[center_43%] opacity-60 saturate-[0.85] transition-transform duration-700 group-hover:scale-[1.02]" />
             <span className="absolute inset-0 grid place-items-center"><span className="grid size-16 place-items-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform group-hover:scale-110"><Play className="ml-1 size-6 fill-current" /></span></span>
           </a>
         </div>
@@ -152,9 +202,9 @@ function Index() {
       <section id="register" className="scroll-mt-8 px-5 py-24 text-center sm:px-8 sm:py-32">
         <div className="mx-auto max-w-[640px]">
           <div className="mx-auto mb-6 grid size-12 place-items-center rounded-full bg-secondary text-primary"><Users className="size-5" /></div>
-          <h2 className="font-display text-5xl font-normal uppercase leading-none sm:text-6xl">Bắt đầu hành trình AI của bạn</h2>
+          <h2 className="font-display text-4xl font-bold leading-tight tracking-[-0.04em] sm:text-5xl">Bắt đầu hành trình AI của bạn</h2>
           <p className="mx-auto mb-9 mt-5 max-w-xl text-lg text-muted-foreground">Tham gia cùng cộng đồng KOL, Affiliate và nhà sáng tạo đang xây dựng hệ thống AI của riêng mình.</p>
-          <RegisterButton label="Đăng ký giữ chỗ ngay" />
+          <RegisterButton label="Đăng ký giữ chỗ ngay" onClick={() => setPaymentOpen(true)} />
           <div className="mx-auto mt-8 grid max-w-md gap-3 text-left text-sm text-muted-foreground sm:grid-cols-2">
             <span className="flex items-center gap-2"><Check className="size-4 shrink-0 text-primary" /> Link tham gia workshop</span>
             <span className="flex items-center gap-2"><Gift className="size-4 shrink-0 text-primary" /> Bộ tài nguyên thực hành</span>
