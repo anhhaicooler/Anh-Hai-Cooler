@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarDays, Check, Gift, Play, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import workshopHero from "@/assets/workshop-hero.jpg";
-import speakerPortrait from "@/assets/speaker-portrait.jpg";
+import workshopCoverAsset from "@/assets/workshop-cover.png.asset.json";
+import speakerPortraitAsset from "@/assets/phong-menly-portrait.png.asset.json";
+
+const workshopHero = workshopCoverAsset.url;
+const speakerPortrait = speakerPortraitAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,9 +38,18 @@ function RegisterButton({ label = "Nhận vé & miễn phí tài nguyên" }: { l
   );
 }
 
+function FallingPetals() {
+  return (
+    <div className="petal-scene" aria-hidden="true">
+      {Array.from({ length: 18 }, (_, index) => <span key={index} className="petal" />)}
+    </div>
+  );
+}
+
 function Index() {
   return (
     <main className="min-h-screen overflow-hidden bg-background font-body text-foreground selection:bg-primary selection:text-primary-foreground">
+      <FallingPetals />
       <div className="bg-primary px-4 py-3 text-center text-primary-foreground">
         <p className="font-mono text-[11px] font-medium uppercase">• Huấn luyện cấp tốc — một lần duy nhất •</p>
       </div>
@@ -45,7 +57,7 @@ function Index() {
       <header className="mx-auto max-w-[880px] px-5 pb-16 pt-14 text-center sm:px-8 sm:pt-20">
         <div className="workshop-rise">
           <p className="mb-5 font-mono text-xs font-medium uppercase text-primary">Workshop thực chiến dành cho người muốn đi trước</p>
-          <h1 className="text-balance font-display text-4xl font-extrabold uppercase leading-[1.02] sm:text-6xl lg:text-7xl">
+          <h1 className="text-balance font-display text-5xl font-normal uppercase leading-[0.94] sm:text-7xl lg:text-8xl">
             Nuôi AI Agent cày thay mình <span className="text-primary">24/7</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl">
@@ -60,7 +72,7 @@ function Index() {
 
         <div className="workshop-rise group relative mt-10 [animation-delay:200ms]">
           <div className="absolute -inset-1 rounded-xl bg-primary/20 opacity-30 blur-xl transition-opacity duration-700 group-hover:opacity-60" />
-          <img src={workshopHero} alt="Không gian làm việc với hệ thống AI Agent trên nhiều màn hình" width={1280} height={720} className="relative aspect-video w-full rounded-lg border border-primary/20 object-cover shadow-2xl" />
+          <img src={workshopHero} alt="Phong Menly giới thiệu ChatGPT Images 2.5" width={1366} height={768} className="relative aspect-video w-full rounded-lg border border-primary/20 object-cover shadow-2xl" />
           <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-md bg-foreground/90 px-3 py-2 font-mono text-[10px] uppercase text-background backdrop-blur sm:bottom-5 sm:left-5">
             <Sparkles className="size-3 text-primary" /> AI Agent thực chiến
           </div>
@@ -77,7 +89,7 @@ function Index() {
         <div className="mx-auto max-w-[800px]">
           <div className="mb-12 text-center sm:mb-16">
             <p className="mb-3 font-mono text-xs uppercase text-primary">Giá trị bạn mang về</p>
-            <h2 className="font-display text-3xl font-extrabold uppercase sm:text-5xl">Bạn sẽ nhận được gì?</h2>
+            <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Bạn sẽ nhận được gì?</h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">Không chỉ là ý tưởng — đây là bộ công cụ và quy trình để bạn bắt tay làm ngay.</p>
           </div>
           <div className="grid gap-3 sm:gap-4">
@@ -85,7 +97,7 @@ function Index() {
               <article key={title} className="group grid grid-cols-[auto_minmax(0,1fr)] gap-4 rounded-lg border border-border bg-background p-5 transition-colors hover:border-primary/40 sm:grid-cols-[64px_minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:p-6">
                 <span className="font-display text-4xl font-extrabold text-primary/25 transition-colors group-hover:text-primary">{String(index + 1).padStart(2, "0")}</span>
                 <div className="min-w-0">
-                  <h3 className="font-display text-lg font-bold uppercase sm:text-xl">{title}</h3>
+                  <h3 className="font-display text-xl font-normal uppercase leading-tight sm:text-2xl">{title}</h3>
                   <p className="mt-1 leading-relaxed text-muted-foreground">{description}</p>
                 </div>
                 <ArrowUpRight className="hidden size-5 shrink-0 text-primary sm:block" aria-hidden="true" />
@@ -99,17 +111,17 @@ function Index() {
         <div className="mx-auto max-w-[800px]">
           <div className="mb-10 text-center">
             <p className="mb-3 font-mono text-xs uppercase text-primary">Người đồng hành</p>
-            <h2 className="font-display text-3xl font-extrabold uppercase sm:text-5xl">Diễn giả huấn luyện</h2>
+            <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Diễn giả huấn luyện</h2>
           </div>
           <div className="rounded-xl border border-border bg-card p-2 shadow-xl">
             <div className="flex flex-col items-center gap-8 rounded-lg bg-background p-6 sm:flex-row sm:p-8">
               <div className="relative shrink-0">
                 <div className="workshop-pulse absolute -inset-3 rounded-full bg-primary/15" />
-                <img src={speakerPortrait} alt="Chân dung diễn giả Minh An" width={816} height={816} loading="lazy" className="relative size-40 rounded-full border-4 border-card object-cover shadow-lg sm:size-48" />
+                <img src={speakerPortrait} alt="Chân dung diễn giả Phong Menly" width={768} height={768} loading="lazy" className="relative size-40 rounded-full border-4 border-card object-cover object-top shadow-lg sm:size-48" />
               </div>
               <div className="min-w-0 text-center sm:text-left">
-                <h3 className="font-display text-3xl font-extrabold uppercase">Minh An</h3>
-                <p className="mt-1 font-mono text-sm uppercase text-primary">AI Automation & Vibe Coding</p>
+                <h3 className="font-display text-4xl font-normal uppercase leading-none">Phong Menly</h3>
+                <p className="mt-2 font-mono text-sm uppercase text-primary">KOL AI & Vibe Coding</p>
                 <div className="my-5 flex flex-wrap justify-center gap-2 sm:justify-start">
                   {["AI Expert", "Creator", "Vibe Coding"].map((tag) => <span key={tag} className="rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase text-secondary-foreground">{tag}</span>)}
                 </div>
@@ -125,7 +137,7 @@ function Index() {
           <div className="mb-10 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-5">
             <div className="min-w-0">
               <p className="mb-3 font-mono text-xs uppercase text-primary">Preview workshop</p>
-              <h2 className="font-display text-3xl font-extrabold uppercase sm:text-5xl">Xem trước nội dung</h2>
+              <h2 className="font-display text-4xl font-normal uppercase leading-none sm:text-6xl">Xem trước nội dung</h2>
               <p className="mt-4 text-background/60">Một lát cắt ngắn về cách AI Agent phối hợp để hoàn thành công việc.</p>
             </div>
             <span className="hidden rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase text-primary sm:block">Exclusive</span>
@@ -140,7 +152,7 @@ function Index() {
       <section id="register" className="scroll-mt-8 px-5 py-24 text-center sm:px-8 sm:py-32">
         <div className="mx-auto max-w-[640px]">
           <div className="mx-auto mb-6 grid size-12 place-items-center rounded-full bg-secondary text-primary"><Users className="size-5" /></div>
-          <h2 className="font-display text-4xl font-extrabold uppercase sm:text-5xl">Bắt đầu hành trình AI của bạn</h2>
+          <h2 className="font-display text-5xl font-normal uppercase leading-none sm:text-6xl">Bắt đầu hành trình AI của bạn</h2>
           <p className="mx-auto mb-9 mt-5 max-w-xl text-lg text-muted-foreground">Tham gia cùng cộng đồng KOL, Affiliate và nhà sáng tạo đang xây dựng hệ thống AI của riêng mình.</p>
           <RegisterButton label="Đăng ký giữ chỗ ngay" />
           <div className="mx-auto mt-8 grid max-w-md gap-3 text-left text-sm text-muted-foreground sm:grid-cols-2">
